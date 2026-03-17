@@ -67,30 +67,39 @@ streamlit run streamlit_app.py
   <img src="screenshots/streamlit.JPG" width="700"/>
 </p>
 
+---
+
 ##  Sample output
 
-Total internal links found: 73
-Healthy: 70
-Redirecting: 2
-Broken: 1
+- Total internal links found: 73
+- Healthy: 70
+- Redirecting: 2
+- Broken: 1
 
 <p align="center">
   <img src="screenshots/demo-11.JPG" width="700"/>
 </p>
 
+---
+
 ##  Design decisions
 
-Used ThreadPoolExecutor for faster link validation (I/O bound optimization)
-Limited crawling to one level deep to avoid performance issues
-Built both CLI and Web UI for flexibility and usability
+- Used ThreadPoolExecutor for faster link validation (I/O bound optimization)
+- Limited crawling to one level deep to avoid performance issues
+- Built both CLI and Web UI for flexibility and usability
+
+---
 
 ##  Future improvements
 
-Recursive crawling
-Retry mechanism for failed links
-Export to JSON/PDF
-Deployment as a hosted web service
+- Recursive crawling
+- Retry mechanism for failed links
+- Export to JSON/PDF
+- Deployment as a hosted web service
+
+---
 
 ##  Author
 S Olive Keran
 GitHub: https://github.com/solive-11
+---
