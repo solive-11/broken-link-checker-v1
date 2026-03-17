@@ -31,7 +31,7 @@ A Python-based tool that crawls a given website URL, extracts all internal links
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/broken-link-checker.git
+git clone https://github.com/solive-11/broken-link-checker.git
 cd broken-link-checker
 
 ### 2. Install dependencies

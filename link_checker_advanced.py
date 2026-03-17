@@ -1,0 +1,127 @@
+import requests
+from bs4 import BeautifulSoup
+import urllib3
+from urllib.parse import urljoin, urlparse
+from concurrent.futures import ThreadPoolExecutor
+import sys
+import csv
+import time
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# extract internal links
+def get_internal_links(url):
+    try:
+        response = requests.get(url, verify=False, timeout=5) #try with 20 and check RAM usage
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        base_domain = urlparse(url).netloc
+        internal_links = set()
+
+        for a_tag in soup.find_all('a'):
+            href = a_tag.get('href')
+
+            if href:
+                full_url = urljoin(url, href)
+                parsed_url = urlparse(full_url)
+
+                if parsed_url.netloc == base_domain:
+                    internal_links.add(full_url)
+
+        return list(internal_links)
+
+    except Exception as e:
+        print("Error fetching page:", e)
+        return []
+
+# Check single link (for threading)
+def check_single_link(link):
+    try:
+        response = requests.get(link, verify=False, timeout=5)
+        return link, response.status_code
+    except:
+        return link, None
+
+# Parallel link checking
+def check_link_status(links):
+    healthy, redirect, broken = [], [], []
+
+    print(f"\n Checking {len(links)} links using parallel requests...\n")
+
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        results = list(executor.map(check_single_link, links))
+
+    for link, status in results:
+        if status == 200:
+            healthy.append(link)
+        elif status and 300 <= status < 400:
+            redirect.append(link)
+        else:
+            broken.append(link)
+
+    return healthy, redirect, broken
+
+# Export to CSV
+def export_to_csv(healthy, redirect, broken):
+    with open("report.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(["Type", "URL"])
+
+        for link in healthy:
+            writer.writerow(["Healthy", link])
+        for link in redirect:
+            writer.writerow(["Redirect", link])
+        for link in broken:
+            writer.writerow(["Broken", link])
+
+    print("\n Report saved as report.csv")
+
+
+if __name__ == "__main__":
+
+    if len(sys.argv) < 2:
+        print("Usage: python link_checker_advanced.py <URL>")
+        sys.exit(1)
+
+    url = sys.argv[1]
+
+    start_time = time.time()
+
+    print(f"\n Scanning: {url}\n")
+
+    links = get_internal_links(url)
+
+    print(f"Total internal links found: {len(links)}")
+
+    healthy, redirect, broken = check_link_status(links)
+
+    print("\n" + "=" * 50)
+    print(" HEALTHY LINKS")
+    print("=" * 50)
+    for link in healthy:
+        print(link)
+
+    print("\n" + "=" * 50)
+    print(" REDIRECTING LINKS")
+    print("=" * 50)
+    for link in redirect:
+        print(link)
+
+    print("\n" + "=" * 50)
+    print(" BROKEN LINKS")
+    print("=" * 50)
+    for link in broken:
+        print(link)
+
+    print("\n" + "=" * 50)
+    print(" SUMMARY")
+    print("=" * 50)
+    print(f"Healthy: {len(healthy)}")
+    print(f"Redirecting: {len(redirect)}")
+    print(f"Broken: {len(broken)}")
+
+    # Export results
+    export_to_csv(healthy, redirect, broken)
+
+    end_time = time.time()
+    print(f"\n Execution Time: {round(end_time - start_time, 2)} seconds\n")
