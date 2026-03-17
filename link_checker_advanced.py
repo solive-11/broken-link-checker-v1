@@ -12,7 +12,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # extract internal links
 def get_internal_links(url):
     try:
-        response = requests.get(url, verify=False, timeout=5) #try with 20 and check RAM usage
+        response = requests.get(url, verify=False, timeout=5, allow_redirects=False) #try with 20 and check RAM usage
         soup = BeautifulSoup(response.text, 'html.parser')
 
         base_domain = urlparse(url).netloc

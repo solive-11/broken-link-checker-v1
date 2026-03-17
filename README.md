@@ -30,6 +30,7 @@ Built with both a **CLI interface** and a **web app using Streamlit**.
 <p align="center">
   <img src="screenshots/pip list.JPG" width="700"/>
 </p>
+
 ---
 
 ##  How to Run
@@ -100,6 +101,6 @@ streamlit run streamlit_app.py
 ---
 
 ##  Author
-S Olive Keran
+S Olive Keran, 
 GitHub: https://github.com/solive-11
 ---
