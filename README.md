@@ -39,16 +39,19 @@ Built with both a **CLI interface** and a **web app using Streamlit**.
 ```bash
 git clone https://github.com/solive-11/broken-link-checker-v1.git
 cd broken-link-checker
+```
 
 ### 2. Install dependencies
 
 ```bash
 pip install -r requirements.txt
+```
 
 ### 3. Run CLI version
 
 ```bash
 python link_checker_advanced.py https://books.toscrape.com
+```
 
 <p align="center">
   <img src="screenshots/check-1.JPG" width="700"/>
@@ -58,6 +61,7 @@ python link_checker_advanced.py https://books.toscrape.com
 
 ```bash
 streamlit run streamlit_app.py
+```
 
 <p align="center">
   <img src="screenshots/streamlit.JPG" width="700"/>
