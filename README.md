@@ -10,9 +10,9 @@ Built with both a **CLI interface** and a **web app using Streamlit**.
 -  Crawls all internal links (one level deep)
 -  Parallel link checking (multithreading)
 -  Categorizes links:
-  -  Healthy
-  -  Redirecting
-  -  Broken
+  --  Healthy
+  --  Redirecting
+  --  Broken
 -  Exports results to CSV
 -  Interactive web UI using Streamlit
 -  Execution time tracking

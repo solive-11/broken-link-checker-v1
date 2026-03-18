@@ -53,7 +53,6 @@ def check_link_status(links):
 
     return healthy, redirect, broken
 
-# Test
 if __name__ == "__main__":
     url = "https://books.toscrape.com"
 

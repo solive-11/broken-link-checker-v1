@@ -37,10 +37,19 @@ def get_internal_links(url):
 # Check single link (for threading)
 def check_single_link(link):
     try:
-        response = requests.get(link, verify=False, timeout=5)
-        return link, response.status_code
+        response = requests.get(link, verify=False, timeout=5, allow_redirects=False)
+
+        if response.is_redirect or response.status_code in [301, 302, 303, 307, 308]:  # Redirect via status code or loc header
+            return link, "redirect"
+
+        elif response.status_code == 200:
+            return link, "healthy"
+
+        else:
+            return link, "broken"
+
     except:
-        return link, None
+        return link, "broken"
 
 # Parallel link checking
 def check_link_status(links):
@@ -52,9 +61,9 @@ def check_link_status(links):
         results = list(executor.map(check_single_link, links))
 
     for link, status in results:
-        if status == 200:
+        if status == "healthy":
             healthy.append(link)
-        elif status and 300 <= status < 400:
+        elif status == "redirect":
             redirect.append(link)
         else:
             broken.append(link)
