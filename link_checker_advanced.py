@@ -109,7 +109,7 @@ if __name__ == "__main__":
 
     print(f"Total internal links found: {len(links)}")
 
-    healthy, redirect, broken = check_link_status(links)
+    healthy, redirect, broken, _, _, _ = check_link_status(links)
 
     print("\n" + "=" * 50)
     print(" HEALTHY LINKS")
