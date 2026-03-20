@@ -1,4 +1,5 @@
 import time
+import pandas as pd
 import streamlit as st
 from link_checker_advanced import get_internal_links, check_link_status
 
@@ -15,7 +16,7 @@ if st.button("Check Links"):
             start_time = time.time()
             links = get_internal_links(url)
             st.write(f"Total internal links found: {len(links)}")
-            healthy, redirect, broken = check_link_status(links)
+            healthy, redirect, broken, healthy_data, redirect_data, broken_data = check_link_status(links)
             end_time = time.time()
 
         st.subheader("Summary")
@@ -26,13 +27,16 @@ if st.button("Check Links"):
         col3.metric("Broken", len(broken))
 
         st.subheader("✅ Healthy Links")
-        st.write(healthy)
+        df_healthy = pd.DataFrame(healthy_data, columns=["URL", "Status Code"])
+        st.dataframe(df_healthy)
 
         st.subheader("🔁 Redirecting Links")
-        st.write(redirect)
+        df_redirect = pd.DataFrame(redirect_data, columns=["URL", "Status Code"])
+        st.dataframe(df_redirect)
 
         st.subheader("❌ Broken Links")
-        st.write(broken)
+        df_broken = pd.DataFrame(broken_data, columns=["URL", "Status Code"])
+        st.dataframe(df_broken)
 
         st.subheader("⏱ Execution Time")
         st.write(f"{round(end_time - start_time, 2)} seconds")
